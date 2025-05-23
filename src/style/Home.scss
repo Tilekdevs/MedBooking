@@ -1,0 +1,53 @@
+.home-page {
+  max-width: 640px;
+  margin: 5rem auto 0 auto;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.home-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1f2937; // темный серый
+}
+
+.home-subtitle {
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+  color: #4b5563; // серый
+}
+
+.home-buttons {
+  display: inline-flex;
+  gap: 1rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.btn-primary {
+  background-color: #3b82f6; // синий
+  color: white;
+
+  &:hover {
+    background-color: #2563eb;
+  }
+}
+
+.btn-secondary {
+  background-color: #e5e7eb; // светло-серый
+  color: #374151; // темный серый
+
+  &:hover {
+    background-color: #d1d5db;
+  }
+}

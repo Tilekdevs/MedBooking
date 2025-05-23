@@ -1,0 +1,70 @@
+.dashboard-logout {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+
+  .btn-logout {
+    background-color: #ef4444; // красный
+    color: white;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #dc2626;
+    }
+  }
+}
+
+.dashboard-appointments {
+  margin-bottom: 2.5rem;
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #111827; // темный цвет
+  }
+
+  .no-appointments {
+    color: #6b7280; // серый
+  }
+
+  .appointments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .appointment-card {
+      background: white;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+      color: #374151;
+    }
+  }
+}
+
+.dashboard-doctors {
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #111827;
+  }
+
+  .doctors-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}

@@ -1,0 +1,52 @@
+.book-appointment-form {
+  max-width: 400px;
+  margin: 2rem auto;
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  label {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .label-text {
+    font-weight: 600;
+    color: #374151; // темно-серый
+    margin-bottom: 0.5rem;
+  }
+
+  .input-field {
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #6366f1; // индиго
+      box-shadow: 0 0 5px rgba(99, 102, 241, 0.5);
+    }
+  }
+
+  .btn-submit {
+    background-color: #4f46e5; // индиго
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #4338ca;
+    }
+  }
+}

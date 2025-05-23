@@ -1,0 +1,35 @@
+.appointment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__input,
+  &__select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db; // gray-300
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #6366f1; // indigo-500
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+    }
+  }
+
+  &__button {
+    background-color: #22c55e; // green-500
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #16a34a; // green-600
+    }
+  }
+}
