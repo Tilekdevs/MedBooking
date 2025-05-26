@@ -1,53 +1,69 @@
 .home-page {
-  max-width: 640px;
-  margin: 5rem auto 0 auto;
   text-align: center;
-  padding: 0 20px;
+  padding: 40px;
 }
 
 .home-title {
   font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: #1f2937; // темный серый
+  margin-bottom: 10px;
 }
 
 .home-subtitle {
-  margin-bottom: 1.5rem;
-  font-size: 1.125rem;
-  color: #4b5563; // серый
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  color: #666;
 }
 
-.home-buttons {
-  display: inline-flex;
-  gap: 1rem;
+.role-selection {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.role-card {
+  border: 1px solid #ddd;
+  padding: 30px;
+  border-radius: 10px;
+  width: 300px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.role-card h2 {
+  margin-bottom: 10px;
+}
+
+.role-card p {
+  margin-bottom: 20px;
+  color: #555;
 }
 
 .btn {
   display: inline-block;
-  padding: 0.5rem 1.25rem;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
   text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
   transition: background-color 0.3s ease;
-  user-select: none;
 }
 
 .btn-primary {
-  background-color: #3b82f6; // синий
+  background-color: #4CAF50;
   color: white;
+}
 
-  &:hover {
-    background-color: #2563eb;
-  }
+.btn-primary:hover {
+  background-color: #45a049;
 }
 
 .btn-secondary {
-  background-color: #e5e7eb; // светло-серый
-  color: #374151; // темный серый
+  background-color: #ddd;
+  color: #333;
+}
 
-  &:hover {
-    background-color: #d1d5db;
-  }
+.btn-secondary:hover {
+  background-color: #ccc;
 }

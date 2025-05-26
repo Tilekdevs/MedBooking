@@ -4,7 +4,7 @@
   margin-bottom: 1.5rem;
 
   .btn-logout {
-    background-color: #ef4444; // красный
+    background-color: #ef4444;
     color: white;
     padding: 0.5rem 1.25rem;
     border-radius: 8px;
@@ -27,11 +27,11 @@
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 1rem;
-    color: #111827; // темный цвет
+    color: #111827;
   }
 
   .no-appointments {
-    color: #6b7280; // серый
+    color: #6b7280; 
   }
 
   .appointments-list {
@@ -67,4 +67,18 @@
       grid-template-columns: repeat(2, 1fr);
     }
   }
+}
+
+.doctor-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.doctor-search,
+.doctor-filter {
+  padding: 0.5rem;
+  font-size: 1rem;
+  min-width: 200px;
 }

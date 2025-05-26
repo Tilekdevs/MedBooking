@@ -1,29 +1,30 @@
 /* eslint-disable react/prop-types */
 import '../style/DoctorCard.scss'
 
-export default function DoctorCard({ doctor, onBook, onEdit, onDelete }) {
+export default function DoctorCard({ doctor, onBook, onDelete, onEdit }) {
   return (
     <div className="doctor-card">
-      <h3 className="doctor-card__name">{doctor.name}</h3>
-      <p className="doctor-card__specialty">Специализация: {doctor.specialty}</p>
-      <p className="doctor-card__experience">
-        Опыт: {doctor.experience} {doctor.experience > 1 ? 'лет' : 'год'}
+      <h3>{doctor.name}</h3>
+      <p>
+        <strong>Специализация:</strong> {doctor.specialization || 'Не указана'}
       </p>
-
-      <div className="doctor-card__actions">
+      <p>
+        <strong>Опыт:</strong> {doctor.experience || 0} лет
+      </p>
+      <div className="doctor-card-actions">
         {onBook && (
-          <button onClick={onBook} className="btn btn--green">
+          <button onClick={onBook} className="btn btn-book">
             Записаться
           </button>
         )}
-        {onEdit && (
-          <button onClick={onEdit} className="btn btn--yellow">
-            Редактировать
+        {onDelete && (
+          <button onClick={onDelete} className="btn btn-delete">
+            Удалить
           </button>
         )}
-        {onDelete && (
-          <button onClick={onDelete} className="btn btn--red">
-            Удалить
+        {onEdit && (
+          <button onClick={onEdit} className="btn btn-edit">
+            Редактировать
           </button>
         )}
       </div>

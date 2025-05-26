@@ -13,7 +13,7 @@
 
     &:focus {
       outline: none;
-      border-color: #6366f1; // индиго
+      border-color: #6366f1;
       box-shadow: 0 0 6px rgba(99, 102, 241, 0.5);
     }
   }
@@ -46,7 +46,7 @@
   padding: 1.5rem 2rem;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  border-top: 4px solid #4ade80; // зеленая полоска сверху
+  border-top: 4px solid #4ade80; 
 
   .schedule-title {
     font-size: 1.25rem;
@@ -74,7 +74,7 @@
     }
 
     .btn-save {
-      background-color: #22c55e; // зеленый
+      background-color: #22c55e; 
       color: white;
       border: none;
       border-radius: 8px;

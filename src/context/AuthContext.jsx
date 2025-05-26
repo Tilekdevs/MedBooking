@@ -1,53 +1,87 @@
 /* eslint-disable react/prop-types */
-// src/context/AuthContext.jsx
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState } from 'react';
+import axios from 'axios';
 
-const AuthContext = createContext()
+const AuthContext = createContext();
 
-const fakeUsers = [
-  { email: 'admin@example.com', password: 'admin123', role: 'admin', token: 'admin-token' },
-  { email: 'user@example.com', password: 'user123', role: 'user', token: 'user-token' },
-]
+function parseJwt(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error('Ошибка парсинга JWT:', e);
+    return null;
+  }
+}
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    // При загрузке пытаемся считать из localStorage
-    const token = localStorage.getItem('token')
-    const role = localStorage.getItem('role')
-    if (token && role) {
-      setUser({ token, role })
+  const [user, setUser] = useState(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = parseJwt(token);
+      return payload ? { email: payload.sub, role: payload.role } : null;
     }
-  }, [])
+    return null;
+  });
 
-  const login = ({ email, password }) => {
-    // Ищем пользователя
-    const found = fakeUsers.find(
-      u => u.email === email && u.password === password
-    )
-    if (!found) {
-      throw new Error('Неверный email или пароль')
+  const login = async ({ email, password }) => {
+    try {
+      // Хардкод администратора
+      if (email === 'admin@example.com' && password === 'admin123') {
+        const fakeToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
+          btoa(JSON.stringify({ sub: 'admin@example.com', role: 'ADMIN' })) +
+          '.signature';
+        localStorage.setItem('token', fakeToken);
+        localStorage.setItem('role', 'ADMIN');
+        setUser({ email: 'admin@example.com', role: 'ADMIN' });
+        return { role: 'ADMIN' };
+      }
+
+      // Обычный запрос к бэкенду
+      const response = await axios.post(
+        'http://localhost:8085/auth/login',
+        { email, password },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': '*/*'
+          }
+        }
+      );
+      const token = response.data.token || response.data;
+      if (!token) throw new Error('Токен не получен');
+      localStorage.setItem('token', token);
+      const payload = parseJwt(token);
+      if (!payload) throw new Error('Невалидный токен');
+      if (payload.role) {
+        localStorage.setItem('role', payload.role);
+      }
+      setUser({ email: payload.sub, role: payload.role });
+      return { role: payload.role };
+    } catch (error) {
+      console.error('Ошибка входа:', error.response?.data || error.message);
+      throw error;
     }
-    // Сохраняем в localStorage и state
-    localStorage.setItem('token', found.token)
-    localStorage.setItem('role', found.role)
-    setUser({ token: found.token, role: found.role })
-  }
+  };
 
   const logout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('role')
-    setUser(null)
-  }
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    setUser(null);
+  };
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
-  )
+  );
 }
 
-export function useAuth() {
-  return useContext(AuthContext)
-}
+export const useAuth = () => useContext(AuthContext);
