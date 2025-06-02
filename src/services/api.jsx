@@ -1,36 +1,27 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:8085', 
+  baseURL: 'http://localhost:8085',
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
+API.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export const loginUser = data => API.post('/auth/login', data);
+export const registerUser = data => API.post('/auth/register', data);
+
+export const fetchDoctors = () => API.get('/doctors');
+export const fetchDoctorSchedule = (id, date) =>
+  API.get(`/doctors/${id}/schedule`, { params: { date } });
+
+export const bookAppointment = data => API.post('/appointments', data);
+
 export default API;
-const API_BASE = 'http://localhost:8085';
-
-export async function registerUser(data) {
-  const res = await fetch(`${API_BASE}/auth/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  });
-  return res.text();
-}
-
-export async function loginUser(data) {
-  const res = await fetch(`${API_BASE}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  });
-  return res.text();
-}
-
-export async function fetchDoctors() {
-  const res = await fetch(`${API_BASE}/doctors`);
-  return res.json();
-}
-
-export async function fetchDoctorSchedule(id, date) {
-  const res = await fetch(`${API_BASE}/doctors/${id}/schedule?date=${date}`);
-  return res.json();
-}

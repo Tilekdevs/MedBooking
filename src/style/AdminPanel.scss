@@ -1,91 +1,101 @@
-.admin-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
+.admin-panel {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #f7f8fc;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
 
-  .input-field {
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
+.admin-panel h1,
+.admin-panel h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 24px;
+}
 
-    &:focus {
-      outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 6px rgba(99, 102, 241, 0.5);
-    }
-  }
+.doctor-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-  .btn-add {
-    background-color: #4f46e5;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 0.5rem 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.doctor-form input {
+  flex: 1 1 150px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
 
-    &:hover {
-      background-color: #4338ca;
-    }
-  }
+.doctor-form input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 6px rgba(79, 70, 229, 0.5);
+}
+
+.doctor-form button {
+  padding: 10px 20px;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  min-width: 140px;
+}
+
+.doctor-form button:disabled {
+  background-color: #a3a0f7;
+  cursor: not-allowed;
+}
+
+.doctor-form button:hover:not(:disabled) {
+  background-color: #4338ca;
 }
 
 .doctor-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.schedule-form-container {
-  margin-top: 2rem;
+.doctor-item {
   background: white;
-  padding: 1.5rem 2rem;
+  margin-bottom: 12px;
+  padding: 14px 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  border-top: 4px solid #4ade80; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 7px rgba(0,0,0,0.05);
+  font-size: 1rem;
+}
 
-  .schedule-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
+.delete-btn {
+  background-color: #dc2626;
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-  .schedule-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+.delete-btn:hover {
+  background-color: #b91c1c;
+}
 
-    .input-field {
-      padding: 0.5rem 0.75rem;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-
-      &:focus {
-        outline: none;
-        border-color: #6366f1;
-        box-shadow: 0 0 6px rgba(99, 102, 241, 0.5);
-      }
-    }
-
-    .btn-save {
-      background-color: #22c55e; 
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 0.5rem 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: #16a34a;
-      }
-    }
-  }
+.error {
+  color: #dc2626;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
 }

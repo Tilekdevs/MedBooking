@@ -1,0 +1,106 @@
+.doctor-page {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2c3e50;
+}
+
+.doctor-form {
+  background: #f7f9fc;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+  margin-bottom: 40px;
+}
+
+.doctor-form h2 {
+  margin-bottom: 20px;
+  color: #34495e;
+}
+
+.doctor-form input {
+  display: block;
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1.8px solid #bdc3c7;
+  font-size: 1rem;
+  transition: border-color 0.25s ease;
+}
+
+.doctor-form input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.doctor-form button {
+  padding: 12px 20px;
+  background-color: #3498db;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.doctor-form button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.doctor-form button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #e74c3c;
+  margin-bottom: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.doctor-list h2 {
+  margin-bottom: 20px;
+  color: #34495e;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.1);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.card p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: #555;
+}

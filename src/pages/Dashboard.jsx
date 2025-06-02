@@ -18,14 +18,15 @@ export default function Dashboard() {
   const fetchAppointments = async () => {
     try {
       const token = localStorage.getItem('token');
+      console.log('Token for appointments:', token);
       if (!token) throw new Error('Токен отсутствует');
       const { data } = await API.get('/appointments/my', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log('Записи:', data);
       setAppointments(data);
     } catch (err) {
       console.error('Ошибка при загрузке записей:', err.response?.data || err.message);
+      if (err.response?.status === 403) navigate('/login');
     }
   };
 
@@ -36,7 +37,6 @@ export default function Dashboard() {
       const { data } = await API.get('/doctors', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log('Врачи:', data);
       setDoctors(data);
     } catch (err) {
       console.error('Ошибка при загрузке врачей:', err.response?.data || err.message);
@@ -44,8 +44,13 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetchAppointments();
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
     fetchDoctors();
+    fetchAppointments();
   }, []);
 
   const handleLogout = () => {
@@ -73,7 +78,7 @@ export default function Dashboard() {
           <div className='appointments-list'>
             {appointments.map(appt => (
               <div key={appt.id} className='appointment-card'>
-                <p><strong>Врач:</strong> {appt.doctorName}</p>
+                <p><strong>Врач:</strong> {appt.doctor?.name || appt.doctorName}</p>
                 <p><strong>Дата:</strong> {appt.date}</p>
                 <p><strong>Время:</strong> {appt.time}</p>
                 <p><strong>Статус:</strong> {appt.status}</p>

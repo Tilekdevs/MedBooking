@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../style/Register.scss';
 
 export default function Register() {
@@ -10,51 +10,112 @@ export default function Register() {
     password: '',
     role: '',
   });
+
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = e => {
-  setForm(prev => {
-    const updated = { ...prev, [e.target.name]: e.target.value };
-    console.log('Изменение формы:', updated);  // <-- лог текущего состояния
-    return updated;
-  });
-};
-
+    setForm(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const handleSubmit = async e => {
-  e.preventDefault();
-  if (!form.name || !form.email || !form.password || !form.role) {
-    alert('Заполните все поля');
-    return;
-  }
+    e.preventDefault();
 
-  console.log('Данные формы для отправки:', form);  // <-- тут лог
+    setError(''); 
 
-  try {
-    const response = await axios.post('http://localhost:8085/auth/register', form, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-    console.log('Успешная регистрация:', response.data);
-    navigate('/login');
-  } catch (err) {
-    console.error('Ошибка при регистрации:', err.response?.data?.message || err.message);
-  }
-};
+    if (!form.name || !form.email || !form.password || !form.role) {
+      setError('Пожалуйста, заполните все поля.');
+      return;
+    }
 
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      password: form.password,
+      role: form.role.trim().toUpperCase(),
+    };
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8085/auth/register',
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        }
+      );
+
+      const token = response.data;
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('role', payload.role);
+      localStorage.setItem('email', payload.email);
+
+      if (payload.role === 'ADMIN') navigate('/admin');
+      else if (payload.role === 'DOCTOR') navigate('/doctor');
+      else navigate('/dashboard');
+    } catch (err) {
+      console.error('Ошибка регистрации:', err.response?.status, err.response?.data);
+      setError(err.response?.data || 'Ошибка при регистрации.');
+    }
+  };
 
   return (
     <div className="register-container">
       <h2 className="register-title">Регистрация</h2>
       <form onSubmit={handleSubmit} className="register-form">
-        <input name="name" value={form.name} placeholder="Имя" onChange={handleChange} className="register-input" />
-        <input name="email" type="email" value={form.email} placeholder="Email" onChange={handleChange} className="register-input" />
-        <input name="password" type="password" value={form.password} placeholder="Пароль" onChange={handleChange} className="register-input" />
-        <select name="role" value={form.role} onChange={handleChange} className="register-input">
-          <option value="USER">Пользователь</option>
-          <option value="ADMIN">Администратор</option>
+        <input
+          name="name"
+          placeholder="Имя"
+          value={form.name}
+          onChange={handleChange}
+          className="register-input"
+          autoComplete="name"
+          required
+        />
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          className="register-input"
+          autoComplete="email"
+          required
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="Пароль"
+          value={form.password}
+          onChange={handleChange}
+          className="register-input"
+          autoComplete="new-password"
+          required
+        />
+        <select
+          name="role"
+          value={form.role}
+          onChange={handleChange}
+          className="register-input"
+          required
+        >
+          <option value="">Выберите роль</option>
+          <option value="PATIENT">Пациент</option>
           <option value="DOCTOR">Доктор</option>
+          <option value="ADMIN">Администратор</option>
         </select>
-        <button type="submit" className="register-button">Зарегистрироваться</button>
+
+        {error && <p className="register-error">{error}</p>}
+
+        <button type="submit" className="register-button">
+          Зарегистрироваться
+        </button>
       </form>
     </div>
   );

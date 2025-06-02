@@ -36,15 +36,6 @@ export default function BookAppointment() {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('Токен отсутствует');
 
-      if (localStorage.getItem('role') === 'ADMIN' && localStorage.getItem('email') === 'admin@example.com') {
-        setSuccess('Запись успешно создана (мок)');
-        setTimeout(() => {
-          setSuccess('');
-          navigate('/dashboard');
-        }, 2000);
-        return;
-      }
-
       await API.post(
         '/appointments',
         {
