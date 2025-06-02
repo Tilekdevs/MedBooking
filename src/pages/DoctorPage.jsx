@@ -12,7 +12,7 @@ function DoctorPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:8085/doctors')
+    fetch('http://localhost:8085/api/doctors')
       .then((res) => res.json())
       .then(setDoctors)
       .catch(() => setError('Не удалось загрузить список докторов'));

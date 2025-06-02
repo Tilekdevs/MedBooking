@@ -23,7 +23,7 @@ export function AuthProvider({ children }) {
 	const login = async ({ email, password }) => {
 		try {
 			console.log('Sending login:', { email, password })
-			const { data } = await axios.post('http://localhost:8085/auth/login', {
+			const { data } = await axios.post('http://localhost:8085/api/auth/login', {
 				email,
 				password,
 			})

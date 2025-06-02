@@ -40,7 +40,7 @@ export default function Register() {
 
     try {
       const response = await axios.post(
-        'http://localhost:8085/auth/register',
+        'http://localhost:8085/api/auth/register',
         payload,
         {
           headers: {
