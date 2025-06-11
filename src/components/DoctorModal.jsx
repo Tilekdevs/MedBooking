@@ -1,173 +1,133 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
-import API from '../services/api';
-import '../style/DoctorModal.scss';
+import { useState, useEffect } from "react";
 
-export default function DoctorModal({ doctor, onClose, onAppointmentBooked }) {
-  const [selectedSlot, setSelectedSlot] = useState(null);
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+const DoctorModal = ({ doctorName = "Доктор", date = "2025-06-12", onClose }) => {
+  const [timeSlots] = useState([
+    "09:00",
+    "10:00",
+    "11:00",
+    "14:00",
+    "15:00",
+    "16:00",
+  ]);
+  const [appointments, setAppointments] = useState([]);
+  const [patientName, setPatientName] = useState("");
+  const [selectedTime, setSelectedTime] = useState(null);
 
-  if (!doctor) return null;
+  useEffect(() => {
+    const saved = localStorage.getItem("appointments");
+    if (saved) setAppointments(JSON.parse(saved));
+  }, []);
 
-  const isValidTime = (time) => {
-    const timeRegex = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
-    return timeRegex.test(time);
+  // Найти, занято ли время, и кем
+  const findAppointmentByTime = (time) => {
+    return appointments.find(
+      (a) => a.date === date && a.time === time
+    );
   };
 
-  const handleBookAppointment = async () => {
-    if (!selectedSlot && (!date || !time)) {
-      setError('Выберите время из расписания или укажите дату и время');
+  const handleTimeClick = (time) => {
+    const appointment = findAppointmentByTime(time);
+    if (appointment) {
+      alert(`Время занято пациентом: ${appointment.patientName}`);
+    } else {
+      setSelectedTime(time);
+    }
+  };
+
+  const handleBook = () => {
+    if (!patientName || !selectedTime) {
+      alert("Введите имя пациента и выберите время");
       return;
     }
-
-    if (!selectedSlot && !isValidTime(time)) {
-      setError('Введите время в формате HH:MM (например, 14:30)');
+    const appointment = findAppointmentByTime(selectedTime);
+    if (appointment) {
+      alert(`Выбранное время уже занято пациентом: ${appointment.patientName}`);
       return;
     }
-
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('Токен отсутствует');
-
-      if (localStorage.getItem('role') === 'ADMIN' && localStorage.getItem('email') === 'admin@example.com') {
-        setSuccess('Запись успешно создана (мок)');
-        setError('');
-        setDate('');
-        setTime('');
-        setSelectedSlot(null);
-        setTimeout(() => {
-          setSuccess('');
-          onClose();
-          if (onAppointmentBooked) onAppointmentBooked();
-        }, 2000);
-        return;
-      }
-
-      const appointmentData = {
-        doctorId: doctor.id,
-        date: selectedSlot ? selectedSlot.day : date,
-        time: selectedSlot ? selectedSlot.time : time,
-        status: 'SCHEDULED'
-      };
-
-      await API.post('/appointments', appointmentData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      setSuccess('Запись успешно создана!');
-      setError('');
-      setDate('');
-      setTime('');
-      setSelectedSlot(null);
-      setTimeout(() => {
-        setSuccess('');
-        onClose();
-        if (onAppointmentBooked) onAppointmentBooked();
-      }, 2000);
-    } catch (err) {
-      setError(err.response?.data?.message || 'Ошибка при создании записи');
-      console.error('Ошибка при записи:', err.response?.data || err.message);
-    }
+    const newAppointment = {
+      doctorName,
+      date,
+      time: selectedTime,
+      patientName,
+    };
+    const updated = [...appointments, newAppointment];
+    setAppointments(updated);
+    localStorage.setItem("appointments", JSON.stringify(updated));
+    alert(`Запись подтверждена на ${selectedTime} для ${patientName}`);
+    onClose();
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>×</button>
-        <h2>{doctor.name}</h2>
-        <p>
-          <strong>Специализация:</strong> {doctor.specialization || 'Не указана'}
-        </p>
-        <p>
-          <strong>Опыт:</strong> {doctor.experience || 0} лет
-        </p>
-        <p>
-          <strong>Описание:</strong> {doctor.description || 'Описание отсутствует'}
-        </p>
-
-        <h3>📅 Расписание</h3>
-        {doctor.schedule?.length > 0 ? (
-          <ul>
-            {doctor.schedule.map((slot, i) => (
-              <li
-                key={i}
-                onClick={() => setSelectedSlot(slot)}
-                className={selectedSlot === slot ? 'selected-slot' : ''}
-                style={{ cursor: 'pointer' }}
-              >
-                {slot.day}: {slot.time}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>Расписание отсутствует</p>
-        )}
-
-        <h3>⭐ Отзывы</h3>
-        {doctor.reviews?.length > 0 ? (
-          <ul>
-            {doctor.reviews.map((r, i) => (
-              <li key={i}>
-                <strong>{r.author}:</strong> {r.text}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>Отзывы отсутствуют</p>
-        )}
-
-        <h3>Запись на прием</h3>
-        <form className="appointment-form">
-          <label>
-            <span className="label-text">Дата</span>
-            <input
-              type="date"
-              value={date}
-              onChange={e => setDate(e.target.value)}
-              disabled={selectedSlot}
-              className="input-field"
-              min={new Date().toISOString().split('T')[0]}
-            />
-          </label>
-          <label>
-            <span className="label-text">Время</span>
-            <input
-              type="time"
-              value={time}
-              onChange={e => setTime(e.target.value)}
-              disabled={selectedSlot}
-              className="input-field"
-            />
-          </label>
-          {selectedSlot && (
-            <div className="selected-slot-info">
-              <p>
-                Выбрано: {selectedSlot.day}, {selectedSlot.time}
-              </p>
+    <>
+      {/* Оверлей */}
+      <div
+        onClick={onClose}
+        style={{
+          position: "fixed",
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: "rgba(0,0,0,0.5)",
+          zIndex: 999,
+        }}
+      />
+      {/* Модальное окно */}
+      <div
+        style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          backgroundColor: "white",
+          padding: 20,
+          borderRadius: 8,
+          zIndex: 1000,
+          width: 320,
+          boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
+          userSelect: "none",
+        }}
+      >
+        <h3>
+          Записаться к {doctorName} <br />
+          на {date}
+        </h3>
+        <input
+          placeholder="Ваше имя"
+          value={patientName}
+          onChange={(e) => setPatientName(e.target.value)}
+          style={{ width: "100%", padding: 6, marginBottom: 10 }}
+        />
+        <div style={{ marginBottom: 10 }}>
+          {timeSlots.map((time) => {
+            const appointment = findAppointmentByTime(time);
+            const taken = Boolean(appointment);
+            return (
               <button
-                type="button"
-                onClick={() => setSelectedSlot(null)}
-                className="btn btn-cancel"
+                key={time}
+                onClick={() => handleTimeClick(time)}
+                style={{
+                  marginRight: 6,
+                  marginBottom: 6,
+                  padding: "6px 12px",
+                  backgroundColor: selectedTime === time ? "#4caf50" : "#eee",
+                  color: selectedTime === time ? "white" : "black",
+                  cursor: "pointer",
+                  border: "none",
+                  borderRadius: 4,
+                  opacity: taken ? 0.6 : 1,
+                }}
               >
-                Сбросить выбор
+                {time} {taken ? ` (занято)` : ""}
               </button>
-            </div>
-          )}
-          <button
-            type="button"
-            onClick={handleBookAppointment}
-            className="btn btn-book"
-          >
-            Подтвердить запись
-          </button>
-        </form>
-
-        {error && <p className="error">{error}</p>}
-        {success && <p className="success">{success}</p>}
+            );
+          })}
+        </div>
+        <button onClick={handleBook} style={{ marginRight: 10 }}>
+          Записаться
+        </button>
+        <button onClick={onClose}>Отмена</button>
       </div>
-    </div>
+    </>
   );
-}
+};
+
+export default DoctorModal;

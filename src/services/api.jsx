@@ -7,13 +7,13 @@ const API = axios.create({
   },
 });
 
-API.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+API.interceptors.response.use(
+  response => response,
+  error => {
+    console.error('API error:', error.response?.data || error.message);
+    return Promise.reject(error);
   }
-  return config;
-});
+);
 
 export const loginUser = data => API.post('/auth/login', data);
 export const registerUser = data => API.post('/auth/register', data);

@@ -11,22 +11,29 @@ export function AuthProvider({ children }) {
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
-		setTimeout(() => {
-			const token = localStorage.getItem('token')
-			if (token) {
-				setUser({ id: 1, email: 'admin@example.com', role: 'ADMIN' })
+		const token = localStorage.getItem('token')
+		const user = localStorage.getItem('user')
+
+		if (token && user) {
+			try {
+				setUser(JSON.parse(user))
+			} catch {
+				setUser(null)
 			}
-			setLoading(false)
-		}, 1000)
+		}
+		setLoading(false)
 	}, [])
 
 	const login = async ({ email, password }) => {
 		try {
 			console.log('Sending login:', { email, password })
-			const { data } = await axios.post('http://localhost:8085/api/auth/login', {
-				email,
-				password,
-			})
+			const { data } = await axios.post(
+				'http://localhost:8085/api/auth/login',
+				{
+					email,
+					password,
+				},
+			)
 			localStorage.setItem('token', data.token || data) // в зависимости что возвращает сервер
 			setUser(data.user || { email }) // пример, надо уточнить
 			return data.user || { email }
