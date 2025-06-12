@@ -40,7 +40,7 @@ export default function Register() {
 
     try {
       const response = await axios.post(
-        'https://77.105.133.23:8085/api/auth/register',
+        '/api/auth/register',
         payload,
         {
           headers: {
