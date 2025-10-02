@@ -1,8 +1,23 @@
-# React + Vite
+**⚠️ Внимание:** на данный момент бэкенд может быть отключён или не развёрнут, поэтому не все функции работают.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Описание проекта
 
-Currently, two official plugins are available:
+MedBooking — система для записи / бронирования медицинских услуг (врачей, клиник и т.д.).  
+Проект включает фронтенд (интерфейс) и бэкенд (сервисы API).  
+Фронтенд обращается к API для:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Просмотра списка врачей / клиник  
+- Записи на приём  
+- Управления расписанием  
+- Пользовательской авторизации  
+
+Бэкенд обрабатывает запросы, хранит данные в базе, реализует логику бизнес-процессов.
+
+## Технологии
+- React
+- Axios / fetch — HTTP-запросы на фронте  
+- JWT / сессии — авторизация  
+
+## Установка и запуск (локально)
+
+npm run dev
